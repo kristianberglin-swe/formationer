@@ -4363,21 +4363,31 @@ function positions(){
     t1.forEach((idx,j)=>pos[idx]=[leftX,startY+j*gapY]);
     t2.forEach((idx,j)=>pos[idx]=[rightX,startY+j*gapY]);
   } else if(current==="linje"){
-    // Skyttelinje: hela 1:a omgången till vänster och hela 2:a omgången till höger.
-    // GRPC står längst till höger i 1:a omgången och STF längst till vänster i 2:a
-    // så att GRPC och STF hamnar bredvid varandra i mitten.
+    // Skyttelinjen utgår från skyttesvärmens ordning.
+    // 1:a omgången står till vänster och vinklar ut åt vänster:
+    // den som stod längst ned i svärmen hamnar längst till vänster,
+    // medan GRPC/främsta soldaten hamnar närmast mitten.
+    // 2:a omgången står till höger och vinklar ut åt höger:
+    // STF/främsta soldaten hamnar närmast GRPC i mitten,
+    // medan den som stod längst ned i svärmen hamnar längst till höger.
     const grpc=people.findIndex(p=>p.role==="GRPC");
     const stf=people.findIndex(p=>p.role==="STF");
 
-    const t1=people.map((p,i)=>p.team==="1"&&i!==grpc?i:null).filter(i=>i!==null);
-    const t2=people.map((p,i)=>p.team==="2"&&i!==stf?i:null).filter(i=>i!==null);
+    const t1=people.map((p,i)=>p.team==="1"?i:null).filter(i=>i!==null);
+    const t2=people.map((p,i)=>p.team==="2"?i:null).filter(i=>i!==null);
 
-    const lineOrder=[
-      ...t1,
-      ...(grpc>=0?[grpc]:[]),
-      ...(stf>=0?[stf]:[]),
-      ...t2
-    ];
+    if(grpc>=0 && t1.includes(grpc)){
+      t1.splice(t1.indexOf(grpc),1);
+      t1.unshift(grpc);
+    }
+    if(stf>=0 && t2.includes(stf)){
+      t2.splice(t2.indexOf(stf),1);
+      t2.unshift(stf);
+    }
+
+    // Vänster -> höger:
+    // nedersta i 1:a ... GRPC | STF ... nedersta i 2:a
+    const lineOrder=[...t1.slice().reverse(), ...t2];
 
     const spacing=82;
     const total=(lineOrder.length-1)*spacing;
