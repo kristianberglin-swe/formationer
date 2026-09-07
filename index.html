@@ -3896,6 +3896,28 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
   border-top:8px solid #c79d45;
 }
 
+
+/* FEM GRUPPER PÅ STARTSKÄRMEN */
+.start-select-panel .group-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+.start-select-panel .group-choice{
+  min-width:0!important;
+}
+.start-select-panel .demo-group-choice small{
+  white-space:nowrap!important;
+}
+@media(max-width:1050px){
+  .start-select-panel .group-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:700px){
+  .start-select-panel .group-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3932,6 +3954,10 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
         <button class="group-choice" type="button" data-group="HA">
           <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
           <strong>HA</strong><small>13 PERSONER</small>
+        </button>
+        <button class="group-choice demo-group-choice" type="button" data-group="DEMO">
+          <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
+          <strong>DEMO</strong><small>GÖR EGEN GRUPP</small>
         </button>
       </div>
 
@@ -4081,7 +4107,7 @@ const formationSigns = {
   }
 };
 
-const GROUP_DEFAULTS = {"EA": [{"name": "KBE", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "OGR", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "ODM", "role": "Sjukvårdare", "roleLabel": "Sjv, Bv", "team": "1"}, {"name": "DMA", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}, {"name": "PTH", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "NPE", "role": "KSP", "roleLabel": "Ksp", "team": "2"}, {"name": "KZE", "role": "Hundförare", "roleLabel": "Hundförare", "team": "1"}, {"name": "LAN", "role": "Soldat", "roleLabel": "Bv", "team": "2"}, {"name": "TFR", "role": "Soldat", "roleLabel": "RPAS", "team": "1"}, {"name": "LLÖ", "role": "Soldat", "roleLabel": "BV", "team": "2"}], "FA": [{"name": "AGR", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "SSJ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "TJO", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSV", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JHA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "PTH", "role": "Hundförare", "roleLabel": "Hundförare", "team": "2"}, {"name": "JGR", "role": "Soldat", "roleLabel": "BV", "team": "1"}, {"name": "ABO", "role": "Förare", "roleLabel": "BV-förare", "team": "2"}, {"name": "DLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "LRA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "GA": [{"name": "MBI", "role": "GRPC", "roleLabel": "GrpC Bv", "team": "1"}, {"name": "FRQ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "MCE", "role": "Förare", "roleLabel": "BV-Förare", "team": "1"}, {"name": "JRO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MÅB", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "ELO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JSM", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "1"}, {"name": "DFU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "SLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "HA": [{"name": "CBS", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "NSU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "LLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSK", "role": "Soldat", "roleLabel": "Ggr BV", "team": "2"}, {"name": "DAN", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "DFR", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JLI", "role": "Förare", "roleLabel": "BV-förare", "team": "1"}, {"name": "CEM", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MPU", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "CIA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "GKA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLI", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "TLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}]};
+const GROUP_DEFAULTS = {"EA": [{"name": "KBE", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "OGR", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "ODM", "role": "Sjukvårdare", "roleLabel": "Sjv, Bv", "team": "1"}, {"name": "DMA", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}, {"name": "PTH", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "NPE", "role": "KSP", "roleLabel": "Ksp", "team": "2"}, {"name": "KZE", "role": "Hundförare", "roleLabel": "Hundförare", "team": "1"}, {"name": "LAN", "role": "Soldat", "roleLabel": "Bv", "team": "2"}, {"name": "TFR", "role": "Soldat", "roleLabel": "RPAS", "team": "1"}, {"name": "LLÖ", "role": "Soldat", "roleLabel": "BV", "team": "2"}], "FA": [{"name": "AGR", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "SSJ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "TJO", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSV", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JHA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "PTH", "role": "Hundförare", "roleLabel": "Hundförare", "team": "2"}, {"name": "JGR", "role": "Soldat", "roleLabel": "BV", "team": "1"}, {"name": "ABO", "role": "Förare", "roleLabel": "BV-förare", "team": "2"}, {"name": "DLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "LRA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "GA": [{"name": "MBI", "role": "GRPC", "roleLabel": "GrpC Bv", "team": "1"}, {"name": "FRQ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "MCE", "role": "Förare", "roleLabel": "BV-Förare", "team": "1"}, {"name": "JRO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MÅB", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "ELO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JSM", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "1"}, {"name": "DFU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "SLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "HA": [{"name": "CBS", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "NSU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "LLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSK", "role": "Soldat", "roleLabel": "Ggr BV", "team": "2"}, {"name": "DAN", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "DFR", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JLI", "role": "Förare", "roleLabel": "BV-förare", "team": "1"}, {"name": "CEM", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MPU", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "CIA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "GKA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLI", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "TLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}], "DEMO": [{"name": "Dutch", "role": "GRPC", "roleLabel": "GRPC", "team": "1"}, {"name": "Dillon", "role": "STF", "roleLabel": "STF", "team": "2"}, {"name": "Mac", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "Billy", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Poncho", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Blain", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Hawkins", "role": "Sjukvårdare", "roleLabel": "Sjv", "team": "1"}, {"name": "Max", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Toecutter", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Furiosa", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}]};
 let currentGroup="";
 let editMode=true;
 let people=[];
