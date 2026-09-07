@@ -3918,6 +3918,98 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
   }
 }
 
+
+/* AVSTÅNDSMARKERINGAR – SKYTTELED / SKYTTEKOLONN */
+.formation-measure{
+  position:absolute;
+  z-index:40;
+  pointer-events:none;
+  color:#f0d28b;
+  font-family:"Arial Black","Arial",sans-serif;
+  font-weight:900;
+  font-size:15px;
+  letter-spacing:.02em;
+  text-shadow:0 2px 4px rgba(0,0,0,.9);
+}
+.measure-v{
+  width:3px;
+  background:#e2b95f;
+  border-radius:3px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.35);
+}
+.measure-v::before,
+.measure-v::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  width:0;height:0;
+  transform:translateX(-50%);
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+}
+.measure-v::before{
+  top:-2px;
+  border-bottom:10px solid #e2b95f;
+}
+.measure-v::after{
+  bottom:-2px;
+  border-top:10px solid #e2b95f;
+}
+.measure-v .measure-label{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  white-space:nowrap;
+  padding:4px 8px;
+  border:1px solid #8f7442;
+  border-radius:7px;
+  background:rgba(12,14,10,.92);
+}
+
+.measure-h{
+  height:3px;
+  background:#e2b95f;
+  border-radius:3px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.35);
+}
+.measure-h::before,
+.measure-h::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:0;height:0;
+  transform:translateY(-50%);
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent;
+}
+.measure-h::before{
+  left:-2px;
+  border-right:10px solid #e2b95f;
+}
+.measure-h::after{
+  right:-2px;
+  border-left:10px solid #e2b95f;
+}
+.measure-h .measure-label{
+  position:absolute;
+  left:50%;
+  top:-36px;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  padding:4px 8px;
+  border:1px solid #8f7442;
+  border-radius:7px;
+  background:rgba(12,14,10,.92);
+}
+
+
+/* GAMMAL GENERISK AVSTÅNDSTEXT BORTTAGEN */
+.distance,
+#stageDistance{
+  display:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -4938,8 +5030,57 @@ function renderStage(){
   direction.style.top="120px";
   // Vid GATA – BAKÅT pekar pilen nedåt.
   direction.style.transform=["gatabakat","korridorbakat"].includes(current) ? "rotate(180deg)" : "";
-  const old=[...stage.querySelectorAll(".soldier-node,.distance,.enemy-marker,.patrol-dog,.t-guide")]; old.forEach(el=>el.remove());
+  const old=[...stage.querySelectorAll(".soldier-node,.distance,.enemy-marker,.patrol-dog,.t-guide,.formation-measure")]; old.forEach(el=>el.remove());
+
   const pos=positions(); pos.forEach(([x,y],i)=>stage.insertAdjacentHTML("beforeend",nodeHTML(people[i],i,x,y)));
+
+  // Tydliga avståndsmarkeringar för skytteled och skyttekolonn.
+  if(current==="led" && orderForLed().length>=2){
+    const ord=orderForLed();
+    const a=pos[ord[0]], b=pos[ord[1]];
+    if(a && b){
+      const guide=document.createElement("div");
+      guide.className="formation-measure measure-v";
+      const x=a[0]+92;
+      const y1=Math.min(a[1],b[1])+20;
+      const y2=Math.max(a[1],b[1])+20;
+      guide.style.left=x+"px";
+      guide.style.top=y1+"px";
+      guide.style.height=Math.max(42,y2-y1)+"px";
+      guide.innerHTML='<span class="measure-label">3–5 m</span>';
+      stage.appendChild(guide);
+    }
+  }
+
+  if(current==="kolonn" && orderForLed().length>=2){
+    const ord=orderForLed();
+    const a=pos[ord[0]], b=pos[ord[1]];
+    if(a && b){
+      // Höjdled
+      const v=document.createElement("div");
+      v.className="formation-measure measure-v";
+      const vx=Math.max(a[0],b[0])+104;
+      const vy1=Math.min(a[1],b[1])+18;
+      const vy2=Math.max(a[1],b[1])+18;
+      v.style.left=vx+"px";
+      v.style.top=vy1+"px";
+      v.style.height=Math.max(42,vy2-vy1)+"px";
+      v.innerHTML='<span class="measure-label">3–5 m höjdled</span>';
+      stage.appendChild(v);
+
+      // Sidled
+      const h=document.createElement("div");
+      h.className="formation-measure measure-h";
+      const hx1=Math.min(a[0],b[0])+34;
+      const hx2=Math.max(a[0],b[0])+34;
+      const hy=Math.min(a[1],b[1])-20;
+      h.style.left=hx1+"px";
+      h.style.top=hy+"px";
+      h.style.width=Math.max(70,hx2-hx1)+"px";
+      h.innerHTML='<span class="measure-label">3–5 m sidled</span>';
+      stage.appendChild(h);
+    }
+  }
 
   if(current==="tformation"){
     const hund=people.findIndex(p=>p.role==="Hundförare" || /hundförare/i.test(p.roleLabel||""));
