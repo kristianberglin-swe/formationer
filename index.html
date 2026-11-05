@@ -1742,7 +1742,7 @@ body{
 /* TOPP – tydligare sektioner */
 .topbar{
   display:grid!important;
-  grid-template-columns:1fr 1fr!important;
+  grid-template-columns:minmax(0,300px)!important;
   gap:18px!important;
   padding:12px 16px 13px!important;
   background:#0e130d!important;
@@ -3899,7 +3899,7 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
 
 /* FEM GRUPPER PÅ STARTSKÄRMEN */
 .start-select-panel .group-grid{
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-columns:minmax(0,300px)!important;
 }
 .start-select-panel .group-choice{
   min-width:0!important;
@@ -3909,12 +3909,12 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
 }
 @media(max-width:1050px){
   .start-select-panel .group-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-columns:minmax(0,300px)!important;
   }
 }
 @media(max-width:700px){
   .start-select-panel .group-grid{
-    grid-template-columns:1fr 1fr!important;
+    grid-template-columns:minmax(0,300px)!important;
   }
 }
 
@@ -4010,8 +4010,87 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
   display:none!important;
 }
 
+
+/* KOMPAKT NAVIGERING – formationen syns direkt utan stor meny */
+.topbar{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:8px 18px!important;
+  padding:7px 12px!important;
+  min-height:0!important;
+  background:#0b100a!important;
+}
+.topbar > div{
+  display:flex!important;
+  align-items:center!important;
+  flex:0 1 auto!important;
+  flex-wrap:wrap!important;
+  gap:6px!important;
+  min-width:0!important;
+}
+.topbar .top-label{
+  margin:0 5px 0 0!important;
+  padding:3px 6px!important;
+  border-left:2px solid #9b7a38!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+}
+.topbar .tabs{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:4px!important;
+  background:transparent!important;
+}
+.topbar .tab{
+  padding:6px 9px!important;
+  min-height:29px!important;
+  border-radius:6px!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+  letter-spacing:0!important;
+}
+.workspace{padding-top:7px!important;}
+#changeGroupBtn{display:none!important;}
+.group-start{display:none!important;}
+@media(max-width:850px){
+  .topbar{gap:5px 8px!important;padding:6px!important;}
+  .topbar > div{width:100%!important;}
+  .topbar .tab{padding:6px 7px!important;font-size:9px!important;}
+}
+
 </style>
-</head>
+<style>
+.sib-nav{padding:8px 12px;min-width:220px}
+.topbar{display:flex!important;flex-wrap:wrap;gap:10px!important;align-items:flex-start!important}
+.topbar>div{flex:0 1 auto!important;min-width:0}
+.sib-scene{min-height:600px;padding:15px 18px 30px;background:radial-gradient(circle at center,#222a1d,#11150e);color:#eee5d2;text-align:center}
+.sib-scene[hidden]{display:none!important}
+.sib-caption{font-weight:900;color:#dfc78d;margin:5px auto 16px}
+.sib-plan{position:relative;width:min(660px,85%);height:440px;margin:0 auto;border:11px solid #aa9b76;border-radius:3px;background:repeating-linear-gradient(0deg,#343c30 0 38px,#30382d 39px 40px);box-shadow:0 14px 36px #0008}
+.sib-plan:before{content:"";position:absolute;left:0;bottom:-12px;width:100%;height:13px;background:#aa9b76}
+.sib-door{position:absolute;bottom:-13px;width:100px;height:15px;background:#252c21;border-left:3px solid #e5d8ae;border-right:3px solid #e5d8ae;z-index:3}
+.sib-door span{position:absolute;top:20px;left:0;width:100%;font-size:12px;color:#f1d8a1;font-weight:900}
+.sib-plan.corner .sib-door{left:4%}
+.sib-plan.centre .sib-door{left:calc(50% - 50px)}
+.sib-person{position:absolute;width:48px;height:48px;border-radius:50%;background:#6f8650;border:3px solid #e0c47e;display:grid;place-items:center;font-size:20px;font-weight:900;box-shadow:0 3px 12px #0008;transition:left 1s ease,top 1s ease;z-index:4;transform:translate(-50%,-50%)}
+.sib-person small{position:absolute;top:49px;font-size:10px;white-space:nowrap;color:#fff1c8;text-shadow:0 1px 3px #000}
+.sib-footer{font-size:12px;max-width:650px;margin:18px auto;color:#bdb9a6}
+.stage-card:fullscreen .sib-scene{min-height:calc(100vh - 130px)}
+.stage-card:fullscreen .sib-plan{height:min(65vh,620px);width:min(75vw,850px)}
+@media(max-width:700px){.sib-plan{width:94%;height:340px}.sib-person{width:38px;height:38px}.sib-scene{min-height:500px}}
+</style>
+<style>
+.sib-person{width:55px!important;height:73px!important;background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important}
+.sib-soldier{width:43px;height:65px;object-fit:contain;position:absolute;left:5px;top:0;z-index:2;filter:drop-shadow(0 2px 2px #000)}
+.sib-tag{position:absolute;top:63px;left:50%;transform:translateX(-50%);background:#34472c;border:1px solid #a78d55;border-radius:7px;padding:3px 5px;min-width:70px;z-index:3;color:#f5e6c2;line-height:1.1}
+.sib-tag b{font-size:10px}.sib-tag small{display:block;position:static!important;font-size:8px;color:#d7c293!important}
+.sib-light{position:absolute;z-index:1;left:50%;top:22px;width:200px;height:110px;pointer-events:none;transform-origin:0 50%;transform:rotate(var(--beam-angle,0deg));clip-path:polygon(0 45%,100% 0,100% 100%,0 55%);background:linear-gradient(90deg,rgba(255,242,156,.48),rgba(255,244,180,.19) 60%,transparent);filter:blur(2px)}
+.sib-plan{overflow:visible}
+.sib-person[data-sib]{transition:left .85s linear,top .85s linear}
+</style></head>
 <body>
 
 
@@ -4028,25 +4107,10 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
       </div>
 
       <h1>VÄLJ GRUPP</h1>
-      <p>Välj EA, FA, GA eller HA för att öppna den färdiga gruppen.</p>
+      <p>Välj DEMO för att skapa och redigera din egen grupp.</p>
 
       <div class="group-grid">
-        <button class="group-choice" type="button" data-group="EA">
-          <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
-          <strong>EA</strong><small>10 PERSONER</small>
-        </button>
-        <button class="group-choice" type="button" data-group="FA">
-          <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
-          <strong>FA</strong><small>10 PERSONER</small>
-        </button>
-        <button class="group-choice" type="button" data-group="GA">
-          <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
-          <strong>GA</strong><small>10 PERSONER</small>
-        </button>
-        <button class="group-choice" type="button" data-group="HA">
-          <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
-          <strong>HA</strong><small>13 PERSONER</small>
-        </button>
+        
         <button class="group-choice demo-group-choice" type="button" data-group="DEMO">
           <span class="group-silhouettes">♟ ♟ ♟ ♟ ♟</span>
           <strong>DEMO</strong><small>GÖR EGEN GRUPP</small>
@@ -4099,6 +4163,8 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
         <div class="top-label">FÖRFLYTTNINGAR</div>
         <div class="tabs" id="movementTabs"></div>
       </div>
+      <div class="sib-nav"><div class="top-label">SIB</div><div class="tabs" id="sibTabs"></div>
+      </div>
     </div>
 
     <div class="workspace">
@@ -4122,6 +4188,17 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
             <button id="resetPlacementBtn" class="reset-placement-btn" type="button"
               title="Återställ formationens ursprungliga placering" aria-label="Återställ placering">↺ ÅTERSTÄLL PLACERING</button>
           </div>
+        </div>
+        <div id="sibScene" class="sib-scene" hidden>
+          <div class="sib-caption" id="sibCaption">Fyra soldater · schematisk rumsmodell</div>
+          <div class="sib-plan" id="sibPlan">
+            <div class="sib-door" id="sibDoor"><span>DÖRR</span></div>
+            <div class="sib-person" data-sib="0"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
+            <div class="sib-person" data-sib="1"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
+            <div class="sib-person" data-sib="2"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
+            <div class="sib-person" data-sib="3"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
+          </div>
+          <div class="sib-footer">Illustrativ modell av rumstyperna från filmen. Slutpositionerna är schematiska, inte en exakt bildruta ur videon.</div>
         </div>
         <div id="stage" class="stage">
           <div class="direction" id="direction"><div class="shaft"></div><div class="label">FÄRDRIKTNING</div></div>
@@ -4199,7 +4276,7 @@ const formationSigns = {
   }
 };
 
-const GROUP_DEFAULTS = {"EA": [{"name": "KBE", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "OGR", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "ODM", "role": "Sjukvårdare", "roleLabel": "Sjv, Bv", "team": "1"}, {"name": "DMA", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}, {"name": "PTH", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "NPE", "role": "KSP", "roleLabel": "Ksp", "team": "2"}, {"name": "KZE", "role": "Hundförare", "roleLabel": "Hundförare", "team": "1"}, {"name": "LAN", "role": "Soldat", "roleLabel": "Bv", "team": "2"}, {"name": "TFR", "role": "Soldat", "roleLabel": "RPAS", "team": "1"}, {"name": "LLÖ", "role": "Soldat", "roleLabel": "BV", "team": "2"}], "FA": [{"name": "AGR", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "SSJ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "TJO", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSV", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JHA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "PTH", "role": "Hundförare", "roleLabel": "Hundförare", "team": "2"}, {"name": "JGR", "role": "Soldat", "roleLabel": "BV", "team": "1"}, {"name": "ABO", "role": "Förare", "roleLabel": "BV-förare", "team": "2"}, {"name": "DLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "LRA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "GA": [{"name": "MBI", "role": "GRPC", "roleLabel": "GrpC Bv", "team": "1"}, {"name": "FRQ", "role": "STF", "roleLabel": "Stf GrpC", "team": "2"}, {"name": "MCE", "role": "Förare", "roleLabel": "BV-Förare", "team": "1"}, {"name": "JRO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MÅB", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "ELO", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JSM", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "1"}, {"name": "DFU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "SLA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}], "HA": [{"name": "CBS", "role": "GRPC", "roleLabel": "GrpC", "team": "1"}, {"name": "NSU", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "LLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MSK", "role": "Soldat", "roleLabel": "Ggr BV", "team": "2"}, {"name": "DAN", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "DFR", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "JLI", "role": "Förare", "roleLabel": "BV-förare", "team": "1"}, {"name": "CEM", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "MPU", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "CIA", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "GKA", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "MLI", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "TLI", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}], "DEMO": [{"name": "Dutch", "role": "GRPC", "roleLabel": "GRPC", "team": "1"}, {"name": "Dillon", "role": "STF", "roleLabel": "STF", "team": "2"}, {"name": "Mac", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "Billy", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Poncho", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Blain", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Hawkins", "role": "Sjukvårdare", "roleLabel": "Sjv", "team": "1"}, {"name": "Max", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Toecutter", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Furiosa", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}]};
+const GROUP_DEFAULTS = {"DEMO": [{"name": "Dutch", "role": "GRPC", "roleLabel": "GRPC", "team": "1"}, {"name": "Dillon", "role": "STF", "roleLabel": "STF", "team": "2"}, {"name": "Mac", "role": "KSP", "roleLabel": "Ksp", "team": "1"}, {"name": "Billy", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Poncho", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Blain", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Hawkins", "role": "Sjukvårdare", "roleLabel": "Sjv", "team": "1"}, {"name": "Max", "role": "Soldat", "roleLabel": "Soldat", "team": "2"}, {"name": "Toecutter", "role": "Soldat", "roleLabel": "Soldat", "team": "1"}, {"name": "Furiosa", "role": "Skarpskytt", "roleLabel": "Skarpskytt", "team": "2"}]};
 let currentGroup="";
 let editMode=true;
 let people=[];
@@ -4212,6 +4289,7 @@ let step = 0, playing = null, editIndex = null, namesVisible=true;
 const formations = [
   ["led","SKYTTELED"],["kolonn","SKYTTEKOLONN"],["svarm","SKYTTESVÄRM"],["linje","SKYTTELINJE"],["kil","SKYTTEKIL"],["tformation","T-FORMATION"]
 ];
+const sibModes=[["sibcorner","CORNER FED ROOM"],["sibcentre","CENTRE FED ROOM"]];
 const movements = [
   ["eldstot","ELDSTÖT"],["blixtlas","BLIXTLÅS HÖGER"],["vaxelvis","VÄXELVIS"],["ansatsvis","ANSATSVIS"],["omfattninghoger","OMFATTNING HÖGER"],["gatabakat","GATA – BAKÅT"],["korridorbakat","KORRIDOR BAKÅT"]
 ];
@@ -4223,6 +4301,7 @@ function roleMeta(role){ return roles[role]||{symbol:"●",label:role}; }
 function renderTabs(){
   formationTabs.innerHTML=formations.map(([id,n])=>`<button class="tab ${current===id?"active":""}" onclick="setMode('${id}')">${n}</button>`).join("");
   movementTabs.innerHTML=movements.map(([id,n])=>`<button class="tab ${current===id?"active":""}" onclick="setMode('${id}')">${n}</button>`).join("");
+  document.getElementById("sibTabs").innerHTML=sibModes.map(([id,n])=>`<button class="tab ${current===id?"active":""}" onclick="setMode('${id}')">${n}</button>`).join("");
 }
 function renderLegend(){
   const legendEl=document.getElementById("legend");
@@ -4337,6 +4416,7 @@ function setMode(id){
   step=0;
   stopPlay();
   renderAll();
+  if(current.startsWith("sib")) setTimeout(()=>playCurrentFromStart(),120);
 
   // Alla förflyttnings-/eldanimationer startar automatiskt när fliken väljs.
   if(["eldstot","blixtlas","vaxelvis","ansatsvis","omfattninghoger","gatabakat","korridorbakat"].includes(current)){
@@ -4904,6 +4984,21 @@ function renderStage(){
   }
 
   document.body.dataset.mode=current;
+  if(current.startsWith("sib")){
+    stageTitle.textContent=current==="sibcorner"?"SIB · CORNER FED ROOM":"SIB · CENTRE FED ROOM";
+    stageSub.textContent="Schematisk visualisering med fyra soldater · inpassering och slutplacering";
+    document.body.dataset.mode=current;
+    const scene=document.getElementById("sibScene");
+    scene.hidden=false;
+    stage.style.display="none";
+    document.getElementById("formationSign").style.display="none";
+    document.getElementById("resetPlacementBtn").style.display="none";
+    return;
+  }
+  document.getElementById("sibScene").hidden=true;
+  stage.style.display="";
+  document.getElementById("formationSign").style.display="";
+  document.getElementById("resetPlacementBtn").style.display="";
   const [title,sub]=modeInfo(); stageTitle.textContent=title; stageSub.innerHTML=modeDescriptions[current]||""; stageDistance.textContent=distanceSelect.value;
   if(playBtn) playBtn.innerHTML='↻ <span>SPELA FRÅN BÖRJAN</span>';
 
@@ -5971,6 +6066,60 @@ personRole.innerHTML=Object.keys(roles).map(r=>`<option>${r}</option>`).join("")
 [showDistance,showTeam,showDirection,showRoleText,distanceSelect,zoomSelect].forEach(el=>el.addEventListener("change",renderStage));
 if(document.getElementById("toggleNames")) document.getElementById("toggleNames").onclick=()=>{namesVisible=!namesVisible;renderStage()};
 if(document.getElementById("fullscreenBtn")) document.getElementById("fullscreenBtn").onclick=()=>document.querySelector(".stage-card").requestFullscreen?.();
+
+async function playSib(runId){
+  const corner=current==="sibcorner", mode=current;
+  const plan=document.getElementById("sibPlan");
+  const caption=document.getElementById("sibCaption");
+  plan.classList.toggle("corner",corner);
+  plan.classList.toggle("centre",!corner);
+  const nodes=[...plan.querySelectorAll(".sib-person")];
+  const names=people.slice(0,4);
+  nodes.forEach((n,i)=>{
+    n.querySelector("img").src=SOLDIER_IMG;
+    n.querySelector("b").textContent=(i+1)+". "+(names[i]?.name||"Soldat");
+    n.querySelector("small").textContent=names[i]?.roleLabel||names[i]?.role||"";
+    n.style.transition="none";
+    n.style.opacity="1";
+    n.style.left=(corner?12:50)+"%";
+    n.style.top=(119+i*12)+"%";
+    n.style.setProperty("--beam-angle","-90deg");
+  });
+  caption.textContent="Startläge · fyra soldater vid dörren";
+  void plan.offsetWidth;
+  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  async function move(i,x,y,angle,duration=900){
+    if(runId!==playbackRunId||current!==mode)return false;
+    const n=nodes[i];
+    n.style.transition=`left ${duration}ms linear, top ${duration}ms linear`;
+    n.style.left=x+"%";n.style.top=y+"%";
+    n.style.setProperty("--beam-angle",angle+"deg");
+    await wait(duration+140);
+    return runId===playbackRunId&&current===mode;
+  }
+  // Animerar de numrerade vägar som användaren ritat för corner-fed.
+  // Centre-fed använder tills vidare en schematisk variant.
+  const routes=corner?[
+    [[12,80,-90],[7,52,-90],[7,8,0]],
+    [[12,80,0],[94,80,-90],[94,58,-90]],
+    [[12,80,-90],[7,52,-90],[7,43,0]],
+    [[12,80,0],[56,80,-90],[56,57,-90]]
+  ]:[
+    [[50,80,-90],[25,74,-90],[25,32,0]],
+    [[50,80,-90],[75,74,-90],[75,32,180]],
+    [[50,80,-90],[25,73,-90],[25,65,0]],
+    [[50,80,-90],[75,73,-90],[75,65,180]]
+  ];
+  for(let i=0;i<4;i++){
+    if(runId!==playbackRunId||current!==mode)return;
+    caption.textContent="Inpassering · soldat "+(i+1)+" av 4";
+    for(const [x,y,a] of routes[i]){
+      if(!await move(i,x,y,a))return;
+    }
+  }
+  caption.textContent="Slutpositioner · fyra soldater i rummet";
+}
+
 function playCurrentFromStart(){
   // Ny uppspelning gör omedelbart alla äldre async-loopar ogiltiga.
   playbackRunId++;
@@ -5990,6 +6139,7 @@ function playCurrentFromStart(){
   step=0;
   renderStage();
 
+  if(current.startsWith("sib")){playSib(runId);return;}
   if(current==="blixtlas"){ playBlixtlasRight(runId); return; }
   if(current==="vaxelvis"){ playVaxelvis(runId); return; }
   if(current==="ansatsvis"){ playAnsatsvis(runId); return; }
@@ -6097,8 +6247,7 @@ toggleSidebar(sessionStorage.getItem("formationer_hide_group")==="1");
 
 renderLegend();
 renderTabs();
-renderPeople();
-document.getElementById("groupStart").classList.remove("hidden");
+loadGroup("DEMO");
 </script>
 </body>
 </html>
