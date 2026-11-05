@@ -4219,7 +4219,17 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
 .sib-light{position:absolute;z-index:1;left:50%;top:22px;width:200px;height:110px;pointer-events:none;transform-origin:0 50%;transform:rotate(var(--beam-angle,0deg));clip-path:polygon(0 45%,100% 0,100% 100%,0 55%);background:linear-gradient(90deg,rgba(255,242,156,.48),rgba(255,244,180,.19) 60%,transparent);filter:blur(2px)}
 .sib-plan{overflow:visible}
 .sib-person[data-sib]{transition:left .85s linear,top .85s linear}
-</style></head>
+</style><style>
+.sib-light{transition:transform .65s ease-in-out!important}
+.sib-plan .sib-point{position:absolute;z-index:5;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#d4e5f4;color:#15202c;border:1px solid #19222a;font-size:17px;font-weight:900;transform:translate(-50%,-50%);pointer-events:none}
+.sib-plan .sib-point[data-p="A"]{left:2%;top:0}
+.sib-plan .sib-point[data-p="B"]{left:50%;top:0}
+.sib-plan .sib-point[data-p="C"]{left:98%;top:0}
+.sib-plan .sib-point[data-p="D"]{left:98%;top:38%}
+.sib-plan .sib-point[data-p="E"]{left:98%;top:98%}
+.sib-plan.centre .sib-point{display:none}
+</style><style>.sib-scene{padding-bottom:200px!important}.sib-plan{margin-bottom:155px!important}</style>
+</head>
 <body>
 
 
@@ -4322,7 +4332,7 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
         <div id="sibScene" class="sib-scene" hidden>
           <div class="sib-caption" id="sibCaption">Fyra soldater · schematisk rumsmodell</div>
           <div class="sib-plan" id="sibPlan">
-            <div class="sib-door" id="sibDoor"><span>DÖRR</span></div>
+            <div class="sib-door" id="sibDoor"><span>DÖRR</span></div><span class="sib-point" data-p="A">A</span><span class="sib-point" data-p="B">B</span><span class="sib-point" data-p="C">C</span><span class="sib-point" data-p="D">D</span><span class="sib-point" data-p="E">E</span>
             <div class="sib-person" data-sib="0"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
             <div class="sib-person" data-sib="1"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
             <div class="sib-person" data-sib="2"><div class="sib-light"></div><img class="sib-soldier" alt="" /><div class="sib-tag"><b></b><small></small></div></div>
@@ -6206,6 +6216,33 @@ async function playSib(runId){
   plan.classList.toggle("centre",!corner);
   const nodes=[...plan.querySelectorAll(".sib-person")];
   const names=people.slice(0,4);
+  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const active=()=>runId===playbackRunId&&current===mode;
+  // Bokstäverna motsvarar punkterna som användaren märkt ut på rumsbilden.
+  const points={A:[2,0],B:[50,0],C:[98,0],D:[98,38],E:[98,98]};
+  const scanSequences=[["A","B","C","B","C"],["E","D","C","B","C"],["B","C","D"],["D","C","B"]];
+  const paths=corner?[
+    [[12,80],[7,52],[7,8]],
+    [[12,80],[94,80],[94,58]],
+    [[12,80],[7,52],[7,43]],
+    [[12,80],[56,80],[56,91]]
+  ]:[
+    [[50,80],[7,74],[7,32]],
+    [[50,80],[93,74],[93,32]],
+    [[50,80],[7,73],[7,70]],
+    [[50,80],[93,73],[93,70]]
+  ];
+  function aimAt(i,letter){
+    const n=nodes[i],target=points[letter];
+    if(!target)return;
+    const x=parseFloat(n.style.left),y=parseFloat(n.style.top);
+    const rect=plan.getBoundingClientRect();
+    const dx=(target[0]-x)*rect.width/100;
+    const dy=(target[1]-y)*rect.height/100;
+    const angle=Math.atan2(dy,dx)*180/Math.PI;
+    n.style.setProperty("--beam-angle",angle+"deg");
+    n.dataset.aim=letter;
+  }
   nodes.forEach((n,i)=>{
     n.querySelector("img").src=SOLDIER_IMG;
     n.querySelector("b").textContent=(i+1)+". "+(names[i]?.name||"Soldat");
@@ -6213,42 +6250,42 @@ async function playSib(runId){
     n.style.transition="none";
     n.style.opacity="1";
     n.style.left=(corner?12:50)+"%";
-    n.style.top=(119+i*12)+"%";
+    n.style.top=(116+i*16)+"%";
     n.style.setProperty("--beam-angle","-90deg");
   });
   caption.textContent="Startläge · fyra soldater vid dörren";
   void plan.offsetWidth;
-  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-  async function move(i,x,y,angle,duration=900){
-    if(runId!==playbackRunId||current!==mode)return false;
-    const n=nodes[i];
-    n.style.transition=`left ${duration}ms linear, top ${duration}ms linear`;
-    n.style.left=x+"%";n.style.top=y+"%";
-    n.style.setProperty("--beam-angle",angle+"deg");
-    await wait(duration+140);
-    return runId===playbackRunId&&current===mode;
-  }
-  // Animerar de numrerade vägar som användaren ritat för corner-fed.
-  // Centre-fed använder tills vidare en schematisk variant.
-  const routes=corner?[
-    [[12,80,-90],[7,52,-90],[7,8,0]],
-    [[12,80,0],[94,80,-90],[94,58,-90]],
-    [[12,80,-90],[7,52,-90],[7,43,0]],
-    [[12,80,0],[56,80,-90],[56,91,-90]]
-  ]:[
-    [[50,80,-90],[7,74,-90],[7,32,0]],
-    [[50,80,-90],[93,74,-90],[93,32,180]],
-    [[50,80,-90],[7,73,-90],[7,70,0]],
-    [[50,80,-90],[93,73,-90],[93,70,180]]
-  ];
-  for(let i=0;i<4;i++){
-    if(runId!==playbackRunId||current!==mode)return;
-    caption.textContent="Inpassering · soldat "+(i+1)+" av 4";
-    for(const [x,y,a] of routes[i]){
-      if(!await move(i,x,y,a))return;
+  // Alla står på ett led utanför samma dörr. Soldat 1 startar först,
+  // därefter följer 2, 3 och 4 med kort fördröjning medan de andra rör sig.
+  const enterDelay=750;
+  const moveDuration=900;
+  async function animateSoldier(i){
+    await wait(i*enterDelay);
+    if(!active())return;
+    const n=nodes[i],route=paths[i],seq=corner?scanSequences[i]:[];
+    // Alla passerar samma dörröppning innan de tar sin egen väg.
+    const doorX=corner?12:50;
+    const steps=[[doorX,92],...route];
+    for(let j=0;j<steps.length;j++){
+      if(!active())return;
+      const [x,y]=steps[j];
+      n.style.transition=`left ${moveDuration}ms linear, top ${moveDuration}ms linear`;
+      n.style.left=x+"%";n.style.top=y+"%";
+      if(corner)aimAt(i,seq[Math.min(j,seq.length-1)]);
+      await wait(moveDuration+80);
+    }
+    if(corner){
+      for(let j=steps.length;j<seq.length;j++){
+        if(!active())return;
+        aimAt(i,seq[j]);
+        await wait(700);
+      }
+      aimAt(i,seq[seq.length-1]);
     }
   }
-  caption.textContent="Slutpositioner · fyra soldater i rummet";
+  caption.textContent="Inpassering · soldaterna följer varandra från ledet";
+  await Promise.all(nodes.map((_,i)=>animateSoldier(i)));
+  if(active())caption.textContent="Slutpositioner · fyra soldater i rummet";
 }
 
 function playCurrentFromStart(){
