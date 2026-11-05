@@ -4080,6 +4080,58 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
 .people-editor-section .icon-btn.delete{color:#e17e67!important;font-size:20px!important}
 .people-editor-section .quick-edit-btn{border:1px solid #8f7546!important;border-radius:7px;background:#2b3325!important;color:#f6e4bd!important}
 @media(max-width:700px){.people-toggle{padding:12px 9px}.people-toggle-hint{font-size:9px}}
+
+/* NY NAVIGERING: TRE TYDLIGA, KOMPAKTA KATEGORIRADER */
+.topbar{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ gap:5px!important;padding:9px 12px!important;
+ background:linear-gradient(180deg,#10170e,#0a0e09)!important;
+ border-bottom:1px solid #5d5032!important;
+}
+.topbar>div,.topbar>.sib-nav{
+ display:grid!important;grid-template-columns:145px minmax(0,1fr)!important;
+ align-items:center!important;gap:10px!important;
+ width:100%!important;min-width:0!important;
+ padding:5px 9px!important;margin:0!important;
+ background:#151d13!important;border:1px solid #38432f!important;
+ border-radius:9px!important;
+}
+.topbar .top-label{
+ display:flex!important;align-items:center!important;
+ height:100%!important;min-height:32px!important;
+ margin:0!important;padding:0 8px!important;
+ border-left:3px solid #b89957!important;
+ background:none!important;color:#d4b577!important;
+ font-family:Arial,sans-serif!important;font-size:11px!important;
+ font-weight:900!important;letter-spacing:.07em!important;
+}
+.topbar .tabs{
+ display:flex!important;flex-wrap:nowrap!important;
+ gap:5px!important;min-width:0!important;
+ overflow-x:auto!important;scrollbar-width:thin;
+ padding:2px 0 4px!important;
+}
+.topbar .tab{
+ flex:0 0 auto!important;min-height:32px!important;
+ padding:7px 11px!important;
+ border:1px solid #58604b!important;border-radius:6px!important;
+ background:#20291c!important;color:#eee7d7!important;
+ font-family:Arial,sans-serif!important;font-size:10px!important;
+ font-weight:800!important;letter-spacing:.015em!important;
+ white-space:nowrap!important;box-shadow:none!important;
+ transition:background .15s,border-color .15s!important;
+}
+.topbar .tab:hover{background:#35412b!important;border-color:#b99a55!important}
+.topbar .tab.active{
+ background:#b99a55!important;color:#15170f!important;
+ border-color:#dfc17c!important;box-shadow:inset 0 0 0 1px #d3b576!important;
+}
+@media(max-width:700px){
+ .topbar{padding:6px!important;gap:4px!important}
+ .topbar>div,.topbar>.sib-nav{grid-template-columns:1fr!important;gap:2px!important;padding:5px 7px!important}
+ .topbar .top-label{min-height:22px!important;font-size:10px!important}
+ .topbar .tab{font-size:10px!important;padding:7px 9px!important}
+}
 </style>
 <style>
 .sib-nav{padding:8px 12px;min-width:220px}
