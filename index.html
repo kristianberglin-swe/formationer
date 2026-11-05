@@ -4132,6 +4132,64 @@ body[data-mode="omfattninghoger"] .soldier-node.team-two-node .muzzle-flash{
  .topbar .top-label{min-height:22px!important;font-size:10px!important}
  .topbar .tab{font-size:10px!important;padding:7px 9px!important}
 }
+
+/* SIDOPANEL 2.0 – STÖRRE LOGOTYP, INGA LJUSA KANTER, MER SCENYTA */
+@media (min-width:851px){
+  .app:not(.sidebar-collapsed){grid-template-columns:310px minmax(0,1fr)!important}
+}
+.sidebar{
+  background:linear-gradient(180deg,#11190f 0%,#0b100a 48%,#080b07 100%)!important;
+  border-right:1px solid #50482f!important;
+}
+.brand.brand-wide-logo{
+  position:relative!important;
+  height:144px!important;
+  min-height:144px!important;
+  max-height:144px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-bottom:2px solid #9c824e!important;
+  background:#090d08!important;
+  box-shadow:inset 0 -10px 14px #080b07,0 5px 12px #0007!important;
+}
+.brand.brand-wide-logo .brand-banner-logo{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  transform:translate(-50%,-50%) scale(1.19)!important;
+  border:0!important;
+  background:#090d08!important;
+}
+.people-editor-section{
+  padding:10px!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+}
+.people-toggle{
+  padding:12px 13px!important;
+  min-height:66px!important;
+  background:linear-gradient(120deg,#242d1f,#192218)!important;
+  border:1px solid #7c6b44!important;
+  border-radius:11px!important;
+  gap:8px!important;
+  box-shadow:0 4px 12px #0005!important;
+}
+.people-toggle-title{font-size:12px!important;line-height:1.3!important;max-width:145px!important}
+.people-toggle-hint{font-size:10px!important;white-space:nowrap!important;letter-spacing:0!important}
+#peopleCount{margin-left:4px!important}
+.people-editor-content{padding-top:9px!important}
+@media(max-width:850px){
+  .brand.brand-wide-logo{height:160px!important;min-height:160px!important;max-height:160px!important}
+  .brand.brand-wide-logo .brand-banner-logo{transform:translate(-50%,-50%) scale(1.08)!important}
+}
+
 </style>
 <style>
 .sib-nav{padding:8px 12px;min-width:220px}
