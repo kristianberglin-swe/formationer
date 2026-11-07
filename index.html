@@ -49,6 +49,8 @@ function heading(p,t){if(p.headingMode==='travel'&&p.points.length>1){let a=pos(
 function background(bg){
  if(bg==='street')return '<image href="gata.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
  if(bg==='terrain')return '<image href="%C3%B6ppet%20landskap.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
+ if(bg==='corner')return '<image href="corner%20fed.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
+ if(bg==='centre'||bg==='center')return '<image href="center%20fed.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
  const corner=bg==='corner',doorX=corner?95:500;
  return `<rect width="1200" height="1150" fill="#404a3d"/><rect x="90" y="85" width="1020" height="925" fill="#59664e" stroke="#aa9b76" stroke-width="22"/><path d="M${doorX} 1010h170" stroke="#202720" stroke-width="27"/><path d="M${doorX} 1010v-18m170 18v-18" stroke="#e5d8ae" stroke-width="5"/><text x="600" y="1090" text-anchor="middle" fill="#f1d8a1" font-size="30">${corner?'CORNER FED ROOM':'CENTRE FED ROOM'} · ENTRÉ NEDTILL</text>`;
 }
