@@ -24,7 +24,7 @@ lastShotKeys=fired;$('scene').innerHTML=out;$('hiddenCount').textContent=hiddenS
 function stop(){playing=false;cancelAnimationFrame(frame);$('play').textContent='▶ Spela'}
 function play(){if(playing){stop();return}if(time>=current.length)time=0;playing=true;started=performance.now()-time*1000/speed;$('play').textContent='⏸ Pausa';function tick(now){if(!playing)return;time=clamp((now-started)/1000*speed,0,current.length);render();if(time>=current.length){stop();return}frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick)}
 function openProject(id){stop();current=PROJECTS.find(x=>x.id===id);if(!current)return;hiddenSoldiers.clear();time=0;lastShotKeys.clear();try{nameOverrides=JSON.parse(localStorage.getItem('formationer-viewer-names:'+current.id))||{}}catch{nameOverrides={}}$('nameEditor').hidden=true;updateNameEditor();document.body.classList.add('in-view');$('library').style.display='none';$('viewer').style.display='block';$('title').textContent=current.name;$('bgname').textContent=bgNames[current.background]||'';render()}
-let activeCategory='Formationer';
+let activeCategory=(()=>{const c=new URLSearchParams(location.search).get('category');return ['Formationer','Förflyttningar','SIB'].includes(c)?c:'Formationer'})();
 function projectCategory(p){return ['Formationer','Förflyttningar','SIB'].includes(p.category)?p.category:((p.background==='corner'||p.background==='centre')?'SIB':'Formationer')}
 function renderList(){
 const box=$('list');box.innerHTML='';
