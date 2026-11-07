@@ -42,7 +42,33 @@ function setting(id){return $(id).checked}
 function overrideFor(p,i){return nameOverrides[p.id||String(i)]||{}}
 function persistOverrides(){try{localStorage.setItem('formationer-viewer-names:'+current.id,JSON.stringify(nameOverrides))}catch{}}
 function updateNameEditor(){const el=$('nameEditor');el.innerHTML='';current.people.forEach((p,i)=>{const ov=overrideFor(p,i),row=document.createElement('div');row.className='name-row';const label=document.createElement('span');label.textContent=(p.enemy?'Fiende ':'Soldat ')+(i+1);const name=document.createElement('input');name.value=ov.name??p.name??'';name.placeholder='Namn';const role=document.createElement('input');role.value=ov.role??p.role??'';role.placeholder='Uppgift, t.ex. gruppchef';name.addEventListener('input',()=>{const k=p.id||String(i);nameOverrides[k]={...overrideFor(p,i),name:name.value};persistOverrides();render()});role.addEventListener('input',()=>{const k=p.id||String(i);nameOverrides[k]={...overrideFor(p,i),role:role.value};persistOverrides();render()});row.append(label,name,role);el.append(row)})}
-const gunfireAudio=new Audio('universfield-automatic-gunfire-191976(1).mp3');gunfireAudio.preload='auto';gunfireAudio.volume=.65;let gunfireReady=false;gunfireAudio.addEventListener('canplaythrough',()=>gunfireReady=true);function shotSound(){if(!setting('sound'))return;try{if(gunfireReady){const s=gunfireAudio.cloneNode();s.volume=.65;s.play().catch(()=>{});return}audioCtx??=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();const t=audioCtx.currentTime,b=audioCtx.createBuffer(1,Math.round(audioCtx.sampleRate*.13),audioCtx.sampleRate),data=b.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,2);const src=audioCtx.createBufferSource(),g=audioCtx.createGain();src.buffer=b;g.gain.value=.13;src.connect(g);g.connect(audioCtx.destination);src.start(t)}catch{}}
+let shotBuffer=null,shotTail=null,shotVoices=0;
+function shotSound(){
+ if(!setting('sound'))return;
+ try{
+  audioCtx??=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  const ctx=audioCtx,rate=ctx.sampleRate;
+  if(!shotBuffer){
+   const n=Math.round(rate*.24),buf=ctx.createBuffer(1,n,rate),d=buf.getChannelData(0);
+   let low=0;
+   for(let i=0;i<n;i++){
+    const t=i/rate,noise=Math.random()*2-1;
+    low=low*.79+noise*.21;
+    const crack=Math.exp(-t*105)*(noise*.68+low*.48);
+    const body=Math.exp(-t*27)*Math.sin(2*Math.PI*(125*t+95*t*t))*.43;
+    const tail=Math.exp(-t*15)*low*.18;
+    d[i]=Math.max(-1,Math.min(1,crack+body+tail));
+   }
+   shotBuffer=buf;
+  }
+  const t=ctx.currentTime,src=ctx.createBufferSource(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+  src.buffer=shotBuffer;filter.type='lowpass';filter.frequency.value=4100;
+  gain.gain.value=.48;
+  src.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+  src.start(t);src.onended=()=>{src.disconnect();filter.disconnect();gain.disconnect()};
+ }catch(e){console.warn('Skottljud kunde inte spelas',e)}
+}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function pos(p,t){let pts=p.points||[p.start];if(pts.length<2)return p.start;let u=clamp((t-(p.delay||0))/Math.max(.1,p.duration||8),0,1),lens=[],total=0;for(let i=1;i<pts.length;i++){let d=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);lens.push(d);total+=d}let target=total*u;for(let i=1;i<pts.length;i++){if(target<=lens[i-1]||i===pts.length-1){let v=lens[i-1]?target/lens[i-1]:0;return [pts[i-1][0]+(pts[i][0]-pts[i-1][0])*v,pts[i-1][1]+(pts[i][1]-pts[i-1][1])*v]}target-=lens[i-1]}return pts.at(-1)}
 function heading(p,t){if(p.headingMode==='travel'&&p.points.length>1){let a=pos(p,Math.max(0,t-.04)),b=pos(p,Math.min(current.length,t+.04));if(Math.hypot(a[0]-b[0],a[1]-b[1])>1)return (Math.atan2(b[0]-a[0],a[1]-b[1])*180/Math.PI+360)%360}let keys=[...(p.directionKeys||[])].sort((a,b)=>a.time-b.time),a=p.heading||0;for(let i=0;i<keys.length;i++){if(keys[i].time>t){if(p.directionTransition==='smooth'&&i>0){let prev=keys[i-1],u=(t-prev.time)/(keys[i].time-prev.time),delta=((keys[i].heading-prev.heading+540)%360)-180;return (prev.heading+u*delta+360)%360}break}a=keys[i].heading}return a}
