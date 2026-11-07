@@ -22,6 +22,19 @@ lastShotKeys=fired;$('scene').innerHTML=out;$('hiddenCount').textContent=hiddenS
 function stop(){playing=false;cancelAnimationFrame(frame);$('play').textContent='▶ Spela'}
 function play(){if(playing){stop();return}if(time>=current.length)time=0;playing=true;started=performance.now()-time*1000/speed;$('play').textContent='⏸ Pausa';function tick(now){if(!playing)return;time=clamp((now-started)/1000*speed,0,current.length);render();if(time>=current.length){stop();return}frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick)}
 function openProject(id){stop();current=PROJECTS.find(x=>x.id===id);if(!current)return;hiddenSoldiers.clear();time=0;lastShotKeys.clear();try{nameOverrides=JSON.parse(localStorage.getItem('formationer-viewer-names:'+current.id))||{}}catch{nameOverrides={}}$('nameEditor').hidden=true;updateNameEditor();document.body.classList.add('in-view');$('library').style.display='none';$('viewer').style.display='block';$('title').textContent=current.name;$('bgname').textContent=bgNames[current.background]||'';render()}
-function renderList(){const box=$('list');box.innerHTML='';if(!PROJECTS.length){box.innerHTML='<div class="empty">Inga publicerade formationer ännu. Skapa och spara dem i ADMIN och exportera en ny visningsfil.</div>';return}for(const p of PROJECTS){const el=document.createElement('article');el.className='item';const h=document.createElement('h2');h.textContent=p.name;const desc=document.createElement('p');desc.textContent=(bgNames[p.background]||'')+' · '+p.people.length+' figurer';const b=document.createElement('button');b.textContent='▶ Visa / spela';b.onclick=()=>openProject(p.id);el.append(h,desc,b);box.append(el)}}
+let activeCategory='Formationer';
+function projectCategory(p){return ['Formationer','Förflyttningar','SIB'].includes(p.category)?p.category:((p.background==='corner'||p.background==='centre')?'SIB':'Formationer')}
+function renderList(){
+const box=$('list');box.innerHTML='';
+const nav=document.createElement('div');nav.style.cssText='display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px';
+for(const category of ['Formationer','Förflyttningar','SIB']){
+const b=document.createElement('button');b.textContent=category;b.className=category===activeCategory?'':'secondary';b.style.fontWeight=category===activeCategory?'700':'400';
+b.onclick=()=>{activeCategory=category;renderList()};nav.append(b)
+}
+box.append(nav);
+const filtered=PROJECTS.filter(p=>projectCategory(p)===activeCategory);
+if(!filtered.length){const empty=document.createElement('div');empty.className='empty';empty.textContent=PROJECTS.length?'Inga animationer i '+activeCategory+' ännu.':'Inga publicerade formationer ännu.';box.append(empty);return}
+for(const p of filtered){const el=document.createElement('article');el.className='item';const h=document.createElement('h2');h.textContent=p.name;const desc=document.createElement('p');desc.textContent=(bgNames[p.background]||'')+' · '+p.people.length+' figurer';const b=document.createElement('button');b.textContent='▶ Visa / spela';b.onclick=()=>openProject(p.id);el.append(h,desc,b);box.append(el)}
+}
 $('scene').addEventListener('click',e=>{if(!current)return;const g=e.target.closest('[data-soldier]');if(!g)return;const i=Number(g.getAttribute('data-soldier'));const p=current.people[i];if(!p)return;hiddenSoldiers.add(p.id||String(i));render()});$('restoreSoldiers').onclick=()=>{hiddenSoldiers.clear();render()};$('back').onclick=()=>{stop();current=null;$('viewer').style.display='none';document.body.classList.remove('in-view');$('library').style.display='block'};$('play').onclick=play;$('reset').onclick=()=>{stop();time=0;render()};$('editNames').onclick=()=>{$('nameEditor').hidden=!$('nameEditor').hidden};for(const id of ['showNumbers','showNames','lights'])$(id).onchange=render;$('half').onchange=()=>{speed=setting('half')?.5:1;if(playing){started=performance.now()-time*1000/speed}};$('seek').oninput=e=>{stop();time=(+e.target.value)/2000*current.length;render()};renderList();
 </script></body></html>
