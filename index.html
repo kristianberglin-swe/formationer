@@ -48,7 +48,7 @@ function pos(p,t){let pts=p.points||[p.start];if(pts.length<2)return p.start;let
 function heading(p,t){if(p.headingMode==='travel'&&p.points.length>1){let a=pos(p,Math.max(0,t-.04)),b=pos(p,Math.min(current.length,t+.04));if(Math.hypot(a[0]-b[0],a[1]-b[1])>1)return (Math.atan2(b[0]-a[0],a[1]-b[1])*180/Math.PI+360)%360}let keys=[...(p.directionKeys||[])].sort((a,b)=>a.time-b.time),a=p.heading||0;for(let i=0;i<keys.length;i++){if(keys[i].time>t){if(p.directionTransition==='smooth'&&i>0){let prev=keys[i-1],u=(t-prev.time)/(keys[i].time-prev.time),delta=((keys[i].heading-prev.heading+540)%360)-180;return (prev.heading+u*delta+360)%360}break}a=keys[i].heading}return a}
 function background(bg){
  if(bg==='street')return '<image href="gata.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
- if(bg==='terrain')return '<image href="%C3%B6ppet%20landskap.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
+ if(bg==='terrain')return '<image href="'+(ASSETS.terrain||'')+'" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
  if(bg==='corner')return '<image href="corner%20fed.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
  if(bg==='centre'||bg==='center')return '<image href="center%20fed.png" x="0" y="0" width="1200" height="1150" preserveAspectRatio="none"/>';
  const corner=bg==='corner',doorX=corner?95:500;
