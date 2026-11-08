@@ -90,7 +90,7 @@ function setMode(next){
    if(adminFrame)published=getProjects();
    const byId=new Map(published.map(p=>[p.id,p]));
    published=published;
-   $('frame').srcdoc=replaceViewer(published);adminFrame=null;
+   $('frame').onload=()=>{try{const d=$('frame').contentDocument;const area=d.getElementById('workMain'),view=d.getElementById('viewer'),welcome=d.getElementById('welcome'),workspace=d.getElementById('workspace');if(area&&view){area.appendChild(view);view.style.display='block';}if(workspace)workspace.style.display='flex';if(welcome)welcome.style.display='none';const active=d.querySelector('#scene');if(active&&!active.innerHTML.trim()){const script=d.createElement('script');script.textContent='if(typeof render==="function")render();';d.body.appendChild(script)}}catch(e){console.error('Visning kunde inte visas',e)}};$('frame').srcdoc=replaceViewer(published);adminFrame=null;
  }
  else{
    const byId=new Map(published.map(p=>[p.id,p]));
