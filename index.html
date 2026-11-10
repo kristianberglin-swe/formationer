@@ -32,8 +32,11 @@ body:has(#home:not([style*="display: none"])) header{display:none}
 #imageAdmin:hover{opacity:1;background:#142c3b}
 #imageAdmin span{font-size:11px}
 @media(max-width:700px){#imageStart{left:20%;width:60%;height:17%}#imageAdmin{right:9px;top:9px}}
+#versionTag{display:none;position:fixed;left:13px;bottom:10px;z-index:4;font:500 11px/1.2 system-ui,sans-serif;letter-spacing:.3px;color:#c2c9c9;opacity:.64;text-shadow:0 1px 4px #000;pointer-events:none;user-select:none}
+body:has(#home:not([style*="display: none"])) #versionTag{display:block}
 </style></head><body>
 <header style="display: none;"><strong>FORMATIONER 2.0</strong><button id="homeBtn">Startsida</button><button id="viewBtn" style="display:none" class="">Visning</button><button id="adminBtn" style="display:none" class="active">Admin</button><button id="exportBtn" style="">Exportera index.html</button><button id="backupBtn" style="">Säkerhetskopia JSON</button><button id="importBtn" style="">Importera JSON</button><input id="fileInput" type="file" accept=".json,application/json"></header>
+<span id="versionTag" aria-label="Version 2.0.1">v2.0.1</span>
 <main id="home" aria-label="Startskärm" style="display: block;">
 <button id="imageStart" type="button" aria-label="Starta visningsprogrammet" title="Starta visningsprogrammet"></button>
 <button id="imageAdmin" type="button" aria-label="Öppna admin" title="Admin">⚙ <span>Admin</span></button>
